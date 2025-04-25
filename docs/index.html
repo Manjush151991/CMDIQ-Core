@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CMDIQ - Unified Admin Control Center</title>
+  <meta name="description" content="CMDIQ: Unified Admin Control Center with enhanced UI/UX features." />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/png" href="https://cmdiq.github.io/CMDIQ-Core/favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary-blue: #2563eb;
+      --primary-blue-light: #3b82f6;
+      --background-light: #f9fafb;
+      --background-section: #f3f4f6;
+      --text-dark: #111827;
+      --text-muted: #6b7280;
+      --card-bg: #ffffff;
+      --card-shadow: rgba(37, 99, 235, 0.2);
+      --font-family: 'Inter', system-ui, sans-serif;
+      --border-radius: 12px;
+      --gap: 1.5rem;
+      --transition: 0.3s ease;
+    }
+
+    body {
+      margin: 0;
+      background-color: var(--background-light);
+      color: var(--text-dark);
+      font-family: var(--font-family);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    header {
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--card-bg);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      user-select: none;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    header .logo {
+      font-weight: 700;
+      font-size: 1.75rem;
+      color: var(--primary-blue);
+      letter-spacing: 0.05em;
+      user-select: text;
+    }
+
+    nav.top-nav {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    nav.top-nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.5rem 0;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.3s ease;
+    }
+
+    nav.top-nav a:hover,
+    nav.top-nav a:focus {
+      border-bottom: 2px solid var(--primary-blue);
+      outline: none;
+      color: var(--primary-blue);
+    }
+
+    .search-bar {
+      margin-left: 2rem;
+      position: relative;
+      flex: 1;
+      max-width: 300px;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 0.5rem 2.5rem 0.5rem 0.75rem;
+      border: 1px solid var(--text-muted);
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    .search-bar input:focus {
+      border-color: var(--primary-blue);
+      outline: none;
+      box-shadow: 0 0 5px var(--primary-blue);
+    }
+
+    .search-bar svg {
+      position: absolute;
+      right: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      fill: var(--text-muted);
+      pointer-events: none;
+      width: 1rem;
+      height: 1rem;
+    }
+
+    button.toggle-theme {
+      background: var(--primary-blue);
+      border: none;
+      color: white;
+      font-size: 1.25rem;
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      border-radius: var(--border-radius);
+      transition: background-color var(--transition), transform 0.2s ease;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+      margin-left: 1rem;
+    }
+
+    button.toggle-theme:hover,
+    button.toggle-theme:focus {
+      background-color: var(--primary-blue-light);
+      outline: none;
+      transform: scale(1.05);
+    }
+
+    main {
+      flex: 1;
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap);
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      margin: 0;
+      color: var(--primary-blue);
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .button-link {
+      background-color: var(--primary-blue);
+      color: white;
+      padding: 0.75rem 1.75rem;
+      border-radius: var(--border-radius);
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background-color var(--transition), transform 0.2s ease;
+      user-select: none;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .button-link:hover,
+    .button-link:focus {
+      background-color: var(--primary-blue-light);
+      transform: scale(1.05);
+      outline: none;
+    }
+
+    .stats-cards {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .stats-card {
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 1.5rem 2rem;
+      box-shadow: 0 4px 12px var(--card-shadow);
+      text-align: center;
+      min-width: 150px;
+      user-select: none;
+      transition: box-shadow var(--transition);
+    }
+
+    .stats-card:hover,
+    .stats-card:focus-within {
+      box-shadow: 0 6px 20px var(--card-shadow);
+      outline: none;
+    }
+
+    .stats-card .number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--primary-blue);
+      margin-bottom: 0.25rem;
+    }
+
+    .stats-card .label {
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .activity-feed {
+      margin-top: 3rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 12px var(--card-shadow);
+      padding: 1rem 1.5rem;
+      user-select: none;
+    }
+
+    .activity-feed h2 {
+      margin-top: 0;
+      font-weight: 700;
+      color: var(--primary-blue);
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .activity-feed ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .activity-feed li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--background-section);
+      font-size: 0.95rem;
+      color: var(--text-dark);
+    }
+
+    .activity-feed li:last-child {
+      border-bottom: none;
+    }
+
+    .try-emulator {
+      display: flex;
+      justify-content: center;
+      margin-top: 3rem;
+    }
+
+    .try-emulator button {
+      background-color: var(--primary-blue);
+      color: white;
+      padding: 0.75rem 2rem;
+      border: none;
+      border-radius: var(--border-radius);
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background-color var(--transition), transform 0.2s ease;
+      user-select: none;
+    }
+
+    .try-emulator button:hover,
+    .try-emulator button:focus {
+      background-color: var(--primary-blue-light);
+      transform: scale(1.05);
+      outline: none;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      user-select: none;
+      background-color: var(--card-bg);
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
+      margin-top: auto;
+    }
+
+    footer a {
+      color: var(--primary-blue);
+      text-decoration: none;
+    }
+
+    footer a:hover,
+    footer a:focus {
+      text-decoration: underline;
+      outline: none;
+    }
+
+    @media (max-width: 600px) {
+      nav.top-nav {
+        display: none;
+      }
+      .hero h1 {
+        font-size: 2.25rem;
+      }
+      .button-group {
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .button-link {
+        justify-content: center;
+        width: 100%;
+      }
+      .stats-cards {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .activity-feed {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo" aria-label="CMDIQ Logo">CMDIQ</div>
+    <nav class="top-nav" aria-label="Primary navigation">
+      <a href="/docs/index.html">Docs</a>
+      <a href="/support.html">Support</a>
+      <a href="/roadmap.html">Roadmap</a>
+    </nav>
+    <div class="search-bar" role="search">
+      <input type="search" placeholder="Search commands or queries..." aria-label="Search commands or queries" />
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <button class="toggle-theme" aria-label="Toggle light and dark theme" title="Toggle light and dark theme" onclick="toggleTheme()">🌗</button>
+  </header>
+
+  <main>
+    <section class="hero" role="banner" aria-label="Introduction">
+      <h1>CMDIQ: Smarter IT Starts Here</h1>
+      <p>A unified end-user computing command center for complex hybrid IT environments.</p>
+      <nav class="button-group" aria-label="Primary actions">
+        <a href="/enroll.html" class="button-link" aria-label="Enroll Device">📡 Enroll Device</a>
+        <a href="/dashboard.html" class="button-link" aria-label="Admin Dashboard">📊 Dashboard</a>
+        <a href="#" class="button-link" aria-label="Ask AI Assistant" onclick="alert('AI Assistant coming soon!')">🤖 Ask AI</a>
+        <a href="/docs/index.html" class="button-link" aria-label="Open Documentation">📘 Docs</a>
+      </nav>
+    </section>
+
+    <section class="stats-cards" aria-label="Quick statistics">
+      <div class="stats-card" tabindex="0" role="region" aria-label="Total Devices">
+        <div class="number">1,245</div>
+        <div class="label">Total Devices</div>
+      </div>
+      <div class="stats-card" tabindex="0" role="region" aria-label="Active Alerts">
+        <div class="number">12</div>
+        <div class="label">Active Alerts</div>
+      </div>
+      <div class="stats-card" tabindex="0" role="region" aria-label="AI Actions Today">
+        <div class="number">8</div>
+        <div class="label">AI Actions Today</div>
+      </div>
+    </section>
+
+    <section class="activity-feed" aria-label="Recent activity">
+      <h2>Recent Activity</h2>
+      <ul>
+        <li>User John enrolled a new device.</li>
+        <li>Policy update applied to 120 devices.</li>
+        <li>AI triaged 3 incidents automatically.</li>
+        <li>New automation rule created by admin.</li>
+        <li>Support ticket #452 closed.</li>
+      </ul>
+    </section>
+
+    <section class="try-emulator" aria-label="Try Emulator">
+      <button onclick="alert('Emulator coming soon!')">🧪 Try Emulator</button>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2024 CMDIQ. Contact: <a href="mailto:support@cmdiq-core.com">support@cmdiq-core.com</a>
+  </footer>
+
+  <script>
+    const toggleButton = document.querySelector('.toggle-theme');
+
+    function toggleTheme() {
+      const body = document.body;
+      const isDark = body.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    }
+
+    // Load theme preference on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      const theme = localStorage.getItem('theme');
+      if (theme === 'dark') {
+        document.body.classList.add('dark');
+      }
+    });
+  </script>
+</body>
+</html>
